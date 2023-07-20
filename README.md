@@ -19,7 +19,7 @@ Still in development, soon more features will be added
 ## Usage via terminal 
 - open terminal - click win + R and then type cmd.exe
 - ```pip3 install telethon```
--```git clone https://github.com/evilbream/TG_adder_with_proxy```
+- ```git clone https://github.com/evilbream/TG_adder_with_proxy```
 - ```cd Tg_adder_with_proxy``` change directory to downloaded folder.
 - ```tg_accs.txt```  - it’ll open  tg_accs.txt to which u can add name, api_id, api_hash and phone and save changes in this file. In the opened file there is an example, replace it with your own data, the data in the example is made up and will not work. If u later want to add more accounts. 
 - ```proxy.txt```  - it’ll open  proxy.txt  if you want to use a proxy, add the data there and save, as shown in the example, all data also is made up.
