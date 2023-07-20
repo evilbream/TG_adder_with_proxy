@@ -161,7 +161,3 @@ def divide_proxy():
 
 if __name__ == '__main__':
     print(get_csv_len('tg_accs.csv'))
-
-
-
-
