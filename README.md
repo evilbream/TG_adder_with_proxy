@@ -1,10 +1,10 @@
 # Features: 
-- multiple account support
-- asynchronous scraper and adder 
-- proxy support (now u can bind proxy to a specific account)
-- filtering users by last online time and first name (more filters in later releases)
-- random time sleep from 2 to 10 seconds
-- mtproxy support only for old version - secret must be a hex-string representing 16 bytes (may be fixed later)
+- Multiple account support
+- Asynchronous scraper and adder 
+- Proxy support (now u can bind proxy to a specific account)
+- Filtering users by last online time and first name (more filters in later releases)
+- Random time sleep from 2 to 10 seconds
+- Mtproxy support only for old version - secret must be a hex-string representing 16 bytes (may be fixed later)
 - Free tool
 
 Still in development, soon more features will be added 
@@ -19,7 +19,7 @@ Still in development, soon more features will be added
 - Download the archive directly and unzip it or u can install git and download archive using git clone [install git](https://github.com/git-guides/install-git) (https://github.com/git-guides/install-git)
 
 ## Usage via terminal 
-- open terminal - click win + R and then type cmd.exe
+- Open terminal - click win + R and then type cmd.exe
 - ```pip3 install telethon```
 - ```git clone https://github.com/evilbream/TG_adder_with_proxy```
 - ```cd Tg_adder_with_proxy``` change directory to downloaded folder.
