@@ -8,11 +8,12 @@ from assist_func import get_from_csv
 
 
 class Parser:
-    def __init__(self):
-        NAME, API_ID, API_HASH = self.get_client ()
-        self.client = TelegramClient (NAME, API_ID, API_HASH)
+    def __init__(self, client):
+        self.client = client
+        #NAME, API_ID, API_HASH = self.get_client () if no client
+        #self.client = TelegramClient (NAME, API_ID, API_HASH)
 
-    @staticmethod
+    @staticmethod # unused method
     def get_client() -> typing.Tuple:
         client_dict = {}
         n_client = 1
