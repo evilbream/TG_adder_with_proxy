@@ -1,2 +1,0 @@
-proxy_type:addr:port:username:password
-HTTP:22.92.130.159:8000:JKGGD3:R6KD4t
