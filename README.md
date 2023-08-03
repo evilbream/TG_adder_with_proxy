@@ -1,5 +1,5 @@
 # Features: 
-- Multiple account support
+- Multiple accounts support
 - Asynchronous scraper and adder 
 - Proxy support (now u can bind proxy to a specific account)
 - Filtering users by last online time and first name (more filters in later releases)
