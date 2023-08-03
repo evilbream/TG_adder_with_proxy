@@ -7,6 +7,8 @@ from telethon import events
 
 from auth import Authorisation
 from assist_func import get_csv_len, get_from_csv, divide_proxy, convert_to_csv, get_txt_len
+# from authorise_accounts import auth  the old method no longer works
+from account_manager import auth_accounts
 from addingUsers import Add_user
 from assist_func import split_ac
 logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
@@ -24,23 +26,8 @@ async def join_groups(clients: typing.List, group_link: str):
 
 
 async def main_adder():
-    if not (os.path.exists('tg_accs.csv')) or (get_csv_len('tg_accs.csv') + 1 < get_txt_len('tg_accs.txt')):
-        convert_to_csv('tg_accs.txt', 'tg_accs.csv', 'accounts')
-    if not os.path.exists ('proxy.csv') or (get_csv_len('proxy.csv') + 1 < get_txt_len('proxy.txt')):
-        convert_to_csv('proxy.txt', 'proxy.csv', 'proxy')
-    # authorise all accounts w or without proxy
-    prox = input('Do you want to use a proxy? (y/n): ').lower()
-    if prox == 'n':
-        get_clients = [await (Authorisation(acc[0], acc[1], acc[2], acc[3]).starts()) for acc in get_from_csv('tg_accs.csv', 'accs')]
-        clients = [client for client in get_clients if client is not None]
-    elif prox == 'y':
-        per_prox_ac = get_csv_len('tg_accs.csv')//get_csv_len('proxy.csv')
-        print(f"I'll use {per_prox_ac} ac per one proxy")
-        get_clients = [await (Authorisation(acc[0], acc[1], acc[2], acc[3], acc[4]).starts()) for acc in divide_proxy()]
-        clients = [client for client in get_clients if client is not None]
-    else:
-        print('u should have typed "y" or "n"')
-        return
+    # clients = await auth() - old method
+    clients = await auth_accounts()
     # join group to which to add users
     if clients:
         group_link = input('Enter group name to which to add users without @, like "group_link" or "https://t.me/group_link": ')
@@ -100,7 +87,7 @@ async def main_adder():
 def choose_dialog(dialog_dict: typing.Dict) -> int:
     for k, v in dialog_dict.items ():
         print (k, v[1])
-    ch_num = input('Choose num of group from which users were parsed: ')
+    ch_num = input('Choose num of the group from which users were parsed: ')
     while not ch_num.isdigit():
         ch_num = input ('Choose number of the group from which users were parsed (digit): ')
     return dialog_dict[int(ch_num)][0]
@@ -133,6 +120,13 @@ def hows_to_add():
 
     return how_to_add, users_num
 
+
+def choose_proxy_type():
+    print('Choose proxy type to use: ')
+    proxy_type = input('1. mtproxy\n2. HTTP/HTTPS/SOCKS\n')
+    while not ((proxy_type == '1') or (proxy_type == '2')):
+        proxy_type = input ('1. mtproxy\n2. HTTP/HTTPS/SOCKS\n')
+    return proxy_type
 
 asyncio.run(main_adder())
 
