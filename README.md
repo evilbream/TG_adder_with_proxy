@@ -3,6 +3,7 @@
 - asynchronous scraper and adder 
 - proxy support (now u can bind proxy to a specific account)
 - filtering users by last online time and first name (more filters in later releases)
+- random time sleep from 2 to 10 seconds
 - mtproxy support only for old version - secret must be a hex-string representing 16 bytes (may be fixed later)
 - Free tool
 
