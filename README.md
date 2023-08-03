@@ -29,7 +29,7 @@ Still in development, soon more features will be added
 - ```python main_adder.py``` - Add scraped members to ur group
 
 ## Usage via PyCharm
-- download and install PyCharm community edition [jetbrains.com](https://www.jetbrains.com/pycharm/download/?section=windows)
+- Download and install PyCharm community edition [jetbrains.com](https://www.jetbrains.com/pycharm/download/?section=windows)
 - Open downloaded folder Tg_adder_with_proxy with PyCharm
 - Run in PyCharm account_manager.py
 - Add account(s) to database with or without proxy
