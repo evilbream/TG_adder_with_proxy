@@ -60,14 +60,14 @@ class Add_user:
         async with self.client:
             group = await self.client.get_entity (group_link)
             chat = InputChannel (group.id, group.access_hash)
-            for user_info in get_from_csv (filename, 'users'):  # юзеры
+            for user_info in get_from_csv (filename, 'users'):
                 users = await self.client.get_entity (int(user_info[0]))
                 user = InputUser (user_id=users.id, access_hash=users.access_hash)
                 try:
                     me = await self.client.get_entity ('me')
                     print (f'adding {user_info[1]} by {me.first_name}')
                     await self.client (InviteToChannelRequest (chat, [user]))
-                    await asyncio.sleep (random.uniform (0.9, 5))
+                    await asyncio.sleep (random.uniform (2, 10))
                 except errors.PeerFloodError:
                     print('Flood error')
                     break
@@ -94,7 +94,7 @@ class Add_user:
         async with self.client:
             group = await self.client.get_entity (self.group_link)
             chat = InputChannel (group.id, group.access_hash)
-            for user_info in get_from_csv (filename, 'users'):  # юзеры
+            for user_info in get_from_csv (filename, 'users'):
                 if user_info[2] != '':
                     user = await self.client.get_entity(user_info[2])
                 else:
@@ -102,7 +102,7 @@ class Add_user:
                     continue
                 user = InputUser (user_id=user.id, access_hash=user.access_hash)
                 try:
-                    await asyncio.sleep (random.uniform (0.9, 5))
+                    await asyncio.sleep (random.uniform (2, 10))
                     me = await self.client.get_entity('me')
                     print (f'adding {user_info[2]} by {me.first_name}')
                     await self.client (InviteToChannelRequest (chat, [user]))
@@ -123,8 +123,5 @@ class Add_user:
                 except Exception as err:
                     print (err)
                     break
-
-
-
 
 
