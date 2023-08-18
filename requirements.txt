@@ -1,1 +1,2 @@
 Telethon==1.28.5
+TelethonFakeTLS==0.8
