@@ -85,7 +85,11 @@ async def sql_get_acs_credentials(api_id):
             if res[4].startswith('MTP'):
                 proxy = proxy_reformer (res[4])
                 conn.close ()
-                return await Authorisation (res[0], res[1], res[2], res[3], mtproxy=proxy).starts ()
+                if len(proxy[2]) == 32:
+                    return await Authorisation (res[0], res[1], res[2], res[3], mtproxy=proxy).starts ()
+                else:
+
+                    return await Authorisation (res[0], res[1], res[2], res[3], new_mtproxy=proxy).starts ()
             else:
                 proxy = proxy_reformer(res[4])
                 conn.close ()
