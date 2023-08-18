@@ -4,7 +4,7 @@
 - Proxy support (now u can bind proxy to a specific account)
 - Filtering users by last online time and first name (more filters in later releases)
 - Random time sleep from 2 to 10 seconds
-- Mtproxy support only for old version - secret must be a hex-string representing 16 bytes (may be fixed later)
+- Mtproxy support for old version - with 16 bytes secret and new version - with ee secret or base 64 secret
 - Free tool
 
 Still in development, soon more features will be added 
@@ -21,6 +21,7 @@ Still in development, soon more features will be added
 ## Usage via terminal 
 - Open terminal - click win + R and then type cmd.exe
 - ```pip3 install telethon```
+- ```pip3 install TelethonFakeTLS```
 - ```git clone https://github.com/evilbream/TG_adder_with_proxy```
 - ```cd Tg_adder_with_proxy``` change directory to downloaded folder.
 - ```exclude_list.txt``` - it'll open exclude_list.txt. If u want to filter users by first name run it and add words. Users with these words in first name will be excluded
