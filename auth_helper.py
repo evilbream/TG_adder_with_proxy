@@ -15,9 +15,15 @@ def proxy_reformer(str_proxy: str):
             proxy = (proxy_list[1], proxy_list[2], '00000000000000000000000000000000')
             return proxy
         else:
-            proxy = (proxy_list[1], proxy_list[2], proxy_list[3])
-            print(proxy)
-            return proxy
+            if len(proxy_list[3]) == 32:
+                proxy = (proxy_list[1], int(proxy_list[2]), proxy_list[3])
+                return proxy
+            elif proxy_list[3].startswith('ee'):
+                proxy = (proxy_list[1], int(proxy_list[2]), proxy_list[3].lstrip('ee'))
+                return proxy
+            elif proxy_list[3].startswith('7'):
+                proxy = (proxy_list[1], int(proxy_list[2]), proxy_list[3].lstrip('7'))
+                return proxy
     elif len(proxy_list) == 5:
         proxy = {
             'proxy_type': proxy_list[0],
