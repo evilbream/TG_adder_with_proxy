@@ -27,6 +27,8 @@ class Authorisation:
                 print(f'Successful log in from {self.name} per {self.proxy["addr"]} proxy')
             elif self.mtproxy is not None:
                 print(f'Successful log in from {self.name} per {self.mtproxy[0]} proxy')
+            elif self.new_mtproxy is not None:
+                print (f'Successful log in from {self.name} per {self.new_mtproxy[0]} proxy')
             else:
                 print (f'Successful log in from {self.name} without proxy')
             return self.client
