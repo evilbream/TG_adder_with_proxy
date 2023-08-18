@@ -1,8 +1,9 @@
 from telethon import TelegramClient, connection
-
+import TelethonFakeTLS
 
 class Authorisation:
-    def __init__(self, name, api_id, api_hash, phone, proxy=None, mtproxy=None):
+    def __init__(self, name, api_id, api_hash, phone, proxy=None, mtproxy=None, new_mtproxy=None):
+        self.new_mtproxy = new_mtproxy
         self.proxy = proxy
         self.mtproxy = mtproxy
         self.phone = phone
@@ -13,6 +14,8 @@ class Authorisation:
             self.client = TelegramClient(self.name, self.api_id, self.api_hash, proxy=self.proxy)
         elif self.mtproxy is not None:
             self.client = TelegramClient(self.name, self.api_id, self.api_hash, connection=connection.ConnectionTcpMTProxyRandomizedIntermediate, proxy=mtproxy)
+        elif self.new_mtproxy is not None:
+            self.client = TelegramClient(self.name, self.api_id, self.api_hash, connection=TelethonFakeTLS.ConnectionTcpMTProxyFakeTLS, proxy=new_mtproxy)
         else:
             self.client = TelegramClient (self.name, self.api_id, self.api_hash)
 
