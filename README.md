@@ -38,6 +38,10 @@ Still in development, soon more features will be added
 - Run in  PyCharm main_parser.py to scrape members 
 - Run  in  PyCharm main_adder.py to add members
 
+#### Some examples of supported MTProxy
+ip: 170.187.188.55 port: 443 secret: eec210ca2aa6d3d81670ed32899925445b626c6f672e636c6f7564666c6172652e636f6d
+ip: 46.149.73.29 port: 443 secret: ee1603010200010001fc030386e24c3add646e2e79656b74616e65742e636f6d646c2e676f6f676c652e636f6d666172616b61762e636f6d160301020001000100000000000000000000000000000000 
+
 ### Errors n questions
 If u have any questions or errors fill free to text me
 
