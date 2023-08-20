@@ -4,7 +4,7 @@
 - Proxy support (now u can bind proxy to a specific account)
 - Filtering users by last online time and first name (more filters in later releases)
 - Random time sleep from 2 to 10 seconds
-- Mtproxy support for old version - with 16 bytes secret and new version - with ee secret or base 64 secret
+- Mtproxy support for new version - with ee secret or base 64 secret and for old version - with 16 bytes secret and
 - Free tool
 
 Still in development, soon more features will be added 
