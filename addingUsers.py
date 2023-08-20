@@ -67,7 +67,7 @@ class Add_user:
                     me = await self.client.get_entity ('me')
                     print (f'adding {user_info[1]} by {me.first_name}')
                     await self.client (InviteToChannelRequest (chat, [user]))
-                    await asyncio.sleep (random.uniform (2, 10))
+                    await asyncio.sleep (random.uniform (2, 7))
                 except errors.PeerFloodError:
                     print('Flood error')
                     break
@@ -102,7 +102,7 @@ class Add_user:
                     continue
                 user = InputUser (user_id=user.id, access_hash=user.access_hash)
                 try:
-                    await asyncio.sleep (random.uniform (2, 10))
+                    await asyncio.sleep (random.uniform (2, 7))
                     me = await self.client.get_entity('me')
                     print (f'adding {user_info[2]} by {me.first_name}')
                     await self.client (InviteToChannelRequest (chat, [user]))
