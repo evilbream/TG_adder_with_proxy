@@ -88,24 +88,25 @@ async def sql_get_acs_credentials(api_id):
                 if len(proxy[2]) == 32:
                     return await Authorisation (res[0], res[1], res[2], res[3], mtproxy=proxy).starts ()
                 else:
-
+                    conn.close ()
                     return await Authorisation (res[0], res[1], res[2], res[3], new_mtproxy=proxy).starts ()
             else:
                 proxy = proxy_reformer(res[4])
+                conn.close ()
                 conn.close ()
                 return await Authorisation(res[0], res[1], res[2], res[3], proxy).starts()
         else:
             log_in = input(f'Unsupported proxy format or no proxy. Do u wanna log in to {res[0]} without proxy? (y/n) ').lower()
             if log_in == 'y':
-                conn.close ()
                 return await Authorisation (res[0], res[1], res[2], res[3]).starts()
             else:
                 print('Ok')
                 conn.close()
     else:
         print ('There is no account with such api id')
-        conn.close()
+        conn.close ()
         return None
+
 
 
 def get_all_api_id():
