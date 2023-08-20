@@ -168,7 +168,6 @@ class Parser:
                         if user.bot:
                             pass
                         else:
-                            print(user.status)
                             user_list.append ((user.id, user.first_name, user.username, user.access_hash))
                 except AttributeError:
                     pass
@@ -229,7 +228,6 @@ class Parser:
                     reaction_in_mes = i.reaction.emoticon  # get emotion in reply
                     if reaction_in_mes == reaction:
                         user = await self.client.get_entity (i.peer_id.user_id)  # get user by id (entity)
-                        print (i)  # delete
                         if user.bot:
                             pass
                         else:
