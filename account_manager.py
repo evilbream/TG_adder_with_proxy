@@ -5,12 +5,34 @@ from telethon import TelegramClient
 from SQL_support.sql_CRUD import sql_get_account, sql_add_account, sql_del_account, sql_change_proxy, \
     sql_get_acs_credentials, get_all_api_id
 
-async def auth_accounts():
+from assist_func import clear_csv
+
+async def send_mes(client: TelegramClient) -> TelegramClient or None:
+    async with client:
+        entity = await client.get_entity('https://t.me/SpamBot')
+        await client.send_message(entity, '/start')
+        await asyncio.sleep(0.2)
+        async for mes in client.iter_messages(entity, limit=1):
+            if str(mes.message).startswith('Good news, no limits are currently '):
+                return client
+            else:
+                return None
+
+async def auth_accounts(skip_account=False):
     get_clients = []
     for api_id in get_all_api_id():
         get_clients.append(await sql_get_acs_credentials(api_id))
     clients = [client for client in get_clients if client is not None]
-    return clients
+    if skip_account is False:
+        return clients
+    else:
+        fresh_clients = []
+        for client in clients:
+            new_cl = await send_mes(client)
+            if new_cl is not None:
+                fresh_clients.append(new_cl)
+        return fresh_clients
+
 
 
 async def auth_for_parsing():
@@ -77,21 +99,26 @@ async def test_auth():
 
 
 async def main_menu():
-    what_to_do = input('Menu:\n1. Add account\n2.View all accounts\n3.Change proxy'
-                       '\n4.Test auth\n5.Delete account\n6.Quit\n - ')
-    while what_to_do != '6':
+    what_to_do = input('Menu:\n1.Add account\n2.View all accounts\n3.Change proxy'
+                       '\n4.Test auth\n5.Delete account\n6.Delete duplicates from parsed users\n7.Quit \n - ')
+    while what_to_do != '7':
         if what_to_do == '1':
             add_account()
         elif what_to_do == '2':
             view_accounts()
         elif what_to_do == '3':
+            view_accounts()
             change_proxy()
         elif what_to_do == '4':
             await test_auth()
         elif what_to_do == '5':
+            view_accounts()
             delete_account()
+        elif what_to_do == '6':
+            clear_csv()
+            print('Duplicates deleted')
         what_to_do = input ('Menu:\n1. Add account\n2.View all accounts\n3.Change proxy'
-                            '\n4.Test auth\n5.Delete account\n6.Quit\n - ')
+                            '\n4.Test auth\n5.Delete account\n6.Delete duplicates from parsed users\n7.Quit \n - ')
 
 
 if __name__ == '__main__':
