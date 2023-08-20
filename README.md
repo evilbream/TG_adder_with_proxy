@@ -1,11 +1,20 @@
 # Features: 
 - Multiple accounts support
-- Asynchronous scraper and adder 
+- Asynchronous scraper and adder
+- Add users by username or id
 - Proxy support (now u can bind proxy to a specific account)
-- Filtering users by last online time and first name (more filters in later releases)
-- Random time sleep from 2 to 10 seconds
-- Mtproxy support for new version - with ee secret or base 64 secret and for old version - with 16 bytes secret and
+- Random time sleep from 2 to 7 seconds
+- Mtproxy support for new version - with ee secret or base 64 secret and for old version - with 16 bytes secret
+- Filtering users by last online time and first name
+- Scrape users from comments in channel
+- Scrape users, who were online later than a certain date or date and time
+- Scrape users, who reacted in the group (by specific emoji or with any emoji)
+- Scrape users only with status Last seen Recently
+- Remove duplicates from the user file
+- Automaticaly filter bot users
+- Automatically skip an account, that reached limit for the day
 - Free tool
+- More features is coming
 
 Still in development, soon more features will be added 
 
