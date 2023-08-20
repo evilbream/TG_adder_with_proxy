@@ -14,7 +14,7 @@
 - Automaticaly filter bot users
 - Automatically skip an account, that reached limit for the day
 - Free tool
-- More features is coming
+- More features are coming
 
 Still in development, soon more features will be added 
 
