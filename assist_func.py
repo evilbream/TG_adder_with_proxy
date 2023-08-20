@@ -70,19 +70,19 @@ def get_from_csv(filename: str, what_to_get: str, line_num=1):
     with open(filename, 'r', newline='', encoding='utf-8') as f:
         csvreader = csv.reader(f)
         for row in csvreader:
-            if what_to_get == 'users':  # если брать юзеров из файла
+            if what_to_get == 'users':  # to get users from file
                 if csvreader.line_num > line_num:
                     try:
                         yield list(row)[0].split(':')[0], list(row)[0].split(':')[1], list(row)[0].split(':')[2], list(row)[0].split(':')[3]
                     except IndexError:
                         continue
-            elif what_to_get == 'accs':  # если брать аки из файла
+            elif what_to_get == 'accs':  # to get accs from file
                 if csvreader.line_num > line_num:
                     try:
                         yield list(row)[0].split(':')[0], list(row)[0].split(':')[1], list(row)[0].split(':')[2], list(row)[0].split(':')[3]
                     except IndexError:
                         continue
-            elif what_to_get == 'prox':  # если брать прокси из файла
+            elif what_to_get == 'prox':  # to get proxies from file
                 if csvreader.line_num > line_num:
                     yield list(row)[0].split(':')[0], list(row)[0].split(':')[1], list(row)[0].split(':')[2], \
                       list(row)[0].split(':')[3], list(row)[0].split(':')[4]
@@ -159,5 +159,20 @@ def divide_proxy():
     return client_list
 
 
+def clear_csv():
+    user_dict = {}
+    len_users = get_csv_len('users.csv')
+    for user in get_from_csv('users.csv', 'users'):
+        try:
+            user_dict[user[0]] = (user[1], user[2], user[3])
+        except KeyError:
+            pass
+
+    users = [(k, v[0], v[1], v[2]) for k, v in user_dict.items()]
+    add_to_csv('users.csv', users, 'users')
+    print (f'Removed {len_users - len(users)} duplicates')
+
+
+
 if __name__ == '__main__':
-    print(get_csv_len('tg_accs.csv'))
+    clear_csv()
