@@ -9,14 +9,12 @@ from assist_func import clear_csv
 
 async def send_mes(client: TelegramClient) -> TelegramClient or None:
     async with client:
-        entity = await client.get_entity('https://t.me/SpamBot')
-        await client.send_message(entity, '/start')
-        await asyncio.sleep(0.2)
-        async for mes in client.iter_messages(entity, limit=1):
-            if str(mes.message).startswith('Good news, no limits are currently '):
-                return client
-            else:
-                return None
+        me = await client.get_me ()
+        if me.restricted:
+            print(f'Skipping {me.first_name}')
+            return None
+        else:
+            return client
 
 async def auth_accounts(skip_account=False):
     get_clients = []
