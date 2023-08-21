@@ -27,7 +27,11 @@ async def join_groups(clients: typing.List, group_link: str):
 
 async def main_adder():
     # clients = await auth() - old method
-    clients = await auth_accounts()
+    skip_account = input('Do u wannna automatically skip account if it have some restriction (may cause errors) (y/n)? ').lower()
+    if skip_account == 'y':
+        clients = await auth_accounts(skip_account=True)
+    else:
+        clients = await auth_accounts ()
     # join group to which to add users
     if clients:
         group_link = input('Enter group name to which to add users without @, like "group_link" or "https://t.me/group_link": ')
