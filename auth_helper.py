@@ -25,13 +25,22 @@ def proxy_reformer(str_proxy: str):
                 proxy = (proxy_list[1], int(proxy_list[2]), proxy_list[3].lstrip('7'))
                 return proxy
     elif len(proxy_list) == 5:
-        proxy = {
-            'proxy_type': proxy_list[0],
-            'addr': proxy_list[1],
-            'port': int (proxy_list[2]),
-            'username': proxy_list[3],
-            'password': proxy_list[4],
-            'rdns': True}
+        if proxy_list[0].lower() == 'https':
+            proxy = {
+                'proxy_type': 'http',
+                'addr': proxy_list[1],
+                'port': int (proxy_list[2]),
+                'username': proxy_list[3],
+                'password': proxy_list[4],
+                'rdns': True}
+        else:
+            proxy = {
+                'proxy_type': proxy_list[0],
+                'addr': proxy_list[1],
+                'port': int (proxy_list[2]),
+                'username': proxy_list[3],
+                'password': proxy_list[4],
+                'rdns': True}
         return proxy
     else:
         print('Unsupported proxy format')
