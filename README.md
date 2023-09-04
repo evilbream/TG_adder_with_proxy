@@ -28,7 +28,8 @@ Still in development, soon more features will be added
 # Getting api_id and api_hash
 * Go to http://my.telegram.org and log in.
 * Click on API development tools and fill the required fields.
-* copy "api_id" n "api_hash" after clicking create app 
+* copy "api_id" n "api_hash" after clicking create app
+* ! Skip this step if use authorization by session files
 
 # Installation and usage on Windows
 - Install python at least version 3.10 [how to install](https://www.digitalocean.com/community/tutorials/install-python-windows-10)
