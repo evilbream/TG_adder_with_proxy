@@ -1,17 +1,22 @@
+<h1 align="center">
+TG ADDER WITH PROXY
+</h1>
+
+<h4 align="center">
+Star it ⭐️ - don’t in darkness let me wither
+</h4>
+
 # Features: 
 - Multiple accounts support
 - Asynchronous scraper and adder
 - Add users by username or id
-- Add accounts using session files
+- Add accounts with 2fa and using session files 
 - Warm up mode for accounts
 - Proxy support (now u can bind proxy to a specific account). Tested with http/https/socks5/socks4
 - Random time sleep from 2 to 7 seconds
 - Mtproxy support for new version - with ee secret or base 64 secret and for old version - with 16 bytes secret
-- Filtering users by last online time and first name
+- Multiple filters to scrape users (by online time, first name, reactions in group, bot users, etc)
 - Scrape users from comments in channel
-- Scrape users, who were online later than a certain date or date and time
-- Scrape users, who reacted in the group (by specific emoji or with any emoji)
-- Scrape users only with status Last seen Recently
 - Remove duplicates from the user file
 - Automaticaly filter bot users
 - Automatically skip an account, that reached limit for the day
@@ -48,6 +53,13 @@ Still in development, soon more features will be added
 - Add data to exclude.txt if you want to filter users by first name 
 - Run in  PyCharm main_parser.py to scrape members 
 - Run  in  PyCharm main_adder.py to add members
+
+### Using session files for authorisation
+- Delete examples of session + json files in session_dir folder 
+- Add session + json files to the session_dir folder. U can add any number of accounts
+- Run ```account_manager.py``` - click Add account - add account using session
+- After adding accounts don't delete session + json files
+- If u latter want to add more accounts just add more session + json files and again run ```account_manager.py``` ...
 
 #### Some examples of supported  MTProxies
 ip: 170.187.188.55 port: 443 secret: eec210ca2aa6d3d81670ed32899925445b626c6f672e636c6f7564666c6172652e636f6d
