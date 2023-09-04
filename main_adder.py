@@ -21,7 +21,7 @@ async def join_groups(clients: typing.List, group_link: str):
     while False in res:
         group_link = input ('Enter group link without @, like "group_link" or "https://t.me/group_link": ')
         join_group = [Add_user (cl).join_group (group_link) for cl in clients]
-        await asyncio.gather (*join_group)
+        res = await asyncio.gather (*join_group)
     return group_link
 
 
@@ -78,7 +78,7 @@ async def main_adder():
                 num += 1
             await asyncio.gather (*client_list, return_exceptions=True)
 
-    elif how_to_add == 'username':   # flood error not handled properly
+    elif how_to_add == 'username':
         num = 0
         client_list = []
         for client in clients:
