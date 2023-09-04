@@ -90,7 +90,7 @@ class Add_user:
                     print(f'{user_info[1]} was kicked from this supergroup/channel')
                 except Exception as err:
                     print(err)
-                    break
+                    continue
 
     async def add_via_username(self, filename: str, group_link: str):
         if group_link.startswith('https://t.me/'):
@@ -140,6 +140,6 @@ class Add_user:
                     break
                 except Exception as err:
                     print (err)
-                    break
+                    continue
 
 
