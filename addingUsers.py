@@ -5,6 +5,7 @@ from telethon import TelegramClient
 from telethon.tl.functions.channels import JoinChannelRequest, InviteToChannelRequest
 from telethon.tl.types import InputChannel, InputUser
 from telethon import errors
+from SQL_support.sql_CRUD import sql_change_something
 
 from assist_func import get_from_csv
 
@@ -58,6 +59,7 @@ class Add_user:
 
     async def add_via_id(self, filename: str, group_link: str):
         async with self.client:
+            me = await self.client.get_entity('me')
             group = await self.client.get_entity (group_link)
             chat = InputChannel (group.id, group.access_hash)
             for user_info in get_from_csv (filename, 'users'):
@@ -70,9 +72,13 @@ class Add_user:
                     await asyncio.sleep (random.uniform (2, 7))
                 except errors.PeerFloodError:
                     print('Flood error')
+                    try:
+                        sql_change_something(me.id, 'restriction', 'true')
+                    except Exception as err:
+                        print(f'Probable have some problem with database {err}')
                     break
                 except errors.UserPrivacyRestrictedError:
-                    print (f"can't add {user_info[1]} due to users privacy setting")
+                    print (f"can't add {user_info[1]} due to the user privacy setting")
                     continue
                 except errors.UserNotMutualContactError:
                     print('User probably was in this group early, but leave it')
@@ -92,6 +98,7 @@ class Add_user:
         else:
             self.group_link = 'https://t.me/' + group_link
         async with self.client:
+            me = await self.client.get_entity ('me')
             group = await self.client.get_entity (self.group_link)
             chat = InputChannel (group.id, group.access_hash)
             for user_info in get_from_csv (filename, 'users'):
@@ -108,6 +115,10 @@ class Add_user:
                     await self.client (InviteToChannelRequest (chat, [user]))
                 except errors.PeerFloodError:
                     print (f'Flood error, try {me.username} this account later')
+                    try:
+                        sql_change_something (me.id, 'restriction', 'true')
+                    except Exception as err:
+                        print(f'Have some problem with database {err}')
                     break
                 except errors.UserPrivacyRestrictedError:
                     print (f"Can't add {user_info[2]} due to users privacy setting")
@@ -120,6 +131,13 @@ class Add_user:
                     continue
                 except errors.UserKickedError:
                     print(f'{user_info[2]} was kicked from this supergroup/channel')
+                except errors.UserBannedInChannelError:
+                    print(f'{user_info[2]} was banned from sending messages in supergroups/channels')
+                    try:
+                        sql_change_something (me.id, 'restriction', 'true')
+                    except Exception as err:
+                        print (f'Have some problem with database {err}')
+                    break
                 except Exception as err:
                     print (err)
                     break
