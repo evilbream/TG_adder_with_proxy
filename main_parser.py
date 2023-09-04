@@ -53,6 +53,7 @@ async def extended_parser():
         users = await Parser(client).get_user_that_reacted_in_chat()
         if users:
             add_to_existing_file (users)
+            print ('successfully parsed')
     elif option == 6:
         users = await Parser (client).users_by_time_filter ()
         if users:
