@@ -2,6 +2,8 @@
 - Multiple accounts support
 - Asynchronous scraper and adder
 - Add users by username or id
+- Add accounts using session files
+- Warm up mode for accounts
 - Proxy support (now u can bind proxy to a specific account). Tested with http/https/socks5/socks4
 - Random time sleep from 2 to 7 seconds
 - Mtproxy support for new version - with ee secret or base 64 secret and for old version - with 16 bytes secret
