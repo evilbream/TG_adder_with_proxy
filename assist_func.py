@@ -2,6 +2,18 @@ import typing
 import csv
 
 
+def get_system_cred():
+    system = []
+    with open('system_model_app_versions.txt', 'r', newline='', encoding='utf-8') as f:
+        csvreader = csv.reader(f)
+        for row in csvreader:
+            try:
+                system.append((list(row)[0].split(':')[0], list(row)[0].split(':')[1], list(row)[0].split(':')[2]))
+            except IndexError:
+                continue
+    return system
+
+
 def get_txt_len(filename: str):
     with open(filename, 'r', encoding='UTF-8') as f:
         return len(f.readlines())
@@ -175,4 +187,4 @@ def clear_csv():
 
 
 if __name__ == '__main__':
-    clear_csv()
+    pass
