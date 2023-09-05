@@ -5,7 +5,7 @@ from dateutil.relativedelta import relativedelta
 
 from auth_helper import proxy_reformer
 from auth import Authorisation
-
+# чтобы работало заменять в бд все на нейм или щифровать сессии шифровать 5 рандомных цифр + 0000
 
 def sql_add_account(name, api_id, api_hash, phone, proxy, system: str, password: str ='', restriction='false'):
     conn = sqlite3.connect ('accounts.db')
@@ -125,27 +125,31 @@ async def sql_get_acs_credentials(api_id, filter_banned=False):
         WHERE API_ID == ?''', (api_id,))
     res = cur.fetchone ()
     if res is not None:
+        app_id = res[1]
+        if '00000' in str(res[1]):
+            app_id = int(str(res[1]).split('00000')[1])
+
         if ':' in res[4]:
             if res[4].startswith('MTP'):
                 proxy = proxy_reformer (res[4])
                 conn.close ()
                 if len(proxy[2]) == 32:
-                    return await Authorisation (res[0], res[1], res[2], res[3], mtproxy=proxy, password=res[6],
+                    return await Authorisation (res[0], app_id, res[2], res[3], mtproxy=proxy, password=res[6],
                                                 device_model=res[5].split(':')[0], system_version=res[5].split(':')[1], app_version=res[5].split(':')[2]).starts (filter_banned=filter_banned)
                 else:
                     conn.close ()
-                    return await Authorisation (res[0], res[1], res[2], res[3], new_mtproxy=proxy, password=res[6],
+                    return await Authorisation (res[0], app_id, res[2], res[3], new_mtproxy=proxy, password=res[6],
                                                 device_model=res[5].split(':')[0], system_version=res[5].split(':')[1], app_version=res[5].split(':')[2]).starts (filter_banned=filter_banned)
             else:
                 proxy = proxy_reformer(res[4])
                 conn.close ()
-                return await Authorisation(res[0], res[1], res[2], res[3], proxy, password=res[6],
+                return await Authorisation(res[0], app_id, res[2], res[3], proxy, password=res[6],
                                            device_model=res[5].split(':')[0], system_version=res[5].split(':')[1], app_version=res[5].split(':')[2]).starts(filter_banned=filter_banned)
         else:
             log_in = input(f'Unsupported proxy format or no proxy. Do u wanna log in to {res[0]} without proxy? (y/n) ').lower()
             if log_in == 'y':
                 conn.close()
-                return await Authorisation (res[0], res[1], res[2], res[3], password=res[6],
+                return await Authorisation (res[0], app_id, res[2], res[3], password=res[6],
                                             device_model=res[5].split(':')[0], system_version=res[5].split(':')[1], app_version=res[5].split(':')[2]).starts(filter_banned=filter_banned)
             else:
                 print('Ok')
