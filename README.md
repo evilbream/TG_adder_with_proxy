@@ -81,6 +81,9 @@ ip: 46.149.73.29 port: 443 secret: ee1603010200010001fc030386e24c3add646e2e79656
 
 I am not responsible for the work of the public proxies above, at the time of the release, the proxies were working
 
+#### Device model, system and app version for each account
+If u want u may add device model, system and app version in system_model_app_versions.txt or even replace existing lines
+
 ### Errors n questions
 If u have any questions or errors fill free to text me
 
