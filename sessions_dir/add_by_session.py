@@ -1,9 +1,11 @@
 import json
 import os
+import random
+import time
 from dataclasses import dataclass
 from SQL_support.sql_CRUD import sql_get_restriction, sql_add_account
 
-
+# одинаковые апи ид добавлять 0 при добавлении или рандомный символ
 @dataclass
 class Add_by_session:
     js_dict: dict
@@ -14,8 +16,8 @@ class Add_by_session:
         return os.path.join ('sessions_dir', f'{name}.session')
 
     @staticmethod
-    def test_if_in_database(api_id):  # returned True if this account not in database
-        res = sql_get_restriction (api_id)  # using restriction to test accounts in bd
+    def test_if_in_database(phone):  # returned True if this account not in database
+        res = sql_get_restriction (0, phone=phone)  # using restriction to test accounts in bd
         if res is None:
             return True
         return False
@@ -24,17 +26,20 @@ class Add_by_session:
         return f'{self.js_dict["device"]}:{self.js_dict["sdk"]}:{self.js_dict["app_version"]}'
 
     def start(self):
-        new = self.test_if_in_database(self.js_dict['app_id'])
+        new = self.test_if_in_database(self.js_dict['phone'])
         if new:
             name = self.get_name()
             system = self.get_system()
+            print(name)
+            app_id = str(random.randint(10000, 99999)) + '00000' + str(self.js_dict['app_id'])
             try:
-                sql_add_account(name, api_id=int(self.js_dict['app_id']),
+                sql_add_account(name, api_id=int(app_id),
                                 api_hash=self.js_dict['app_hash'], phone=self.js_dict['phone'],
                                 proxy=self.proxy, password=self.js_dict['twoFA'], system=system)
                 print(f'{self.js_dict["session_file"]} was successfully added to db')
             except Exception as err:
-                print(f'Something went wrong {err}')
+                print(f'Something went frong {err}')
+
 
 
 def add_account_by_session():
@@ -74,7 +79,9 @@ def session_auth(one_proxy_for_all=True):
                        "'MTP:mtproxy.network:8880:secret' (if the proxy has no secret enter 0 instead of secret): ")
         for session in get_session_list(): # add account to db one by one
             js_dict = get_credentials_from_json(session) # returned js dictionary converted to py
+            print(js_dict)
             Add_by_session(js_dict, proxy).start()
+            continue
     else:
         for session in get_session_list(): # add account to db one by one
             js_dict = get_credentials_from_json(session) # returned js dictionary converted to py
@@ -83,4 +90,5 @@ def session_auth(one_proxy_for_all=True):
                            "MTProto Proxies), f.e. 'HTTP:22.92.130.159:8000:JKGGD3:R6KD4t' or "
                            "'MTP:mtproxy.network:8880:secret' (if the proxy has no secret enter 0 instead of secret): ")
             Add_by_session(js_dict, proxy).start()
+            continue
 
