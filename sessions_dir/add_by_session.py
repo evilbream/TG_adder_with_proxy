@@ -5,7 +5,6 @@ import time
 from dataclasses import dataclass
 from SQL_support.sql_CRUD import sql_get_restriction, sql_add_account
 
-# одинаковые апи ид добавлять 0 при добавлении или рандомный символ
 @dataclass
 class Add_by_session:
     js_dict: dict
