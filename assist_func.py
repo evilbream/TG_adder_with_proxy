@@ -1,3 +1,4 @@
+import os
 import typing
 import csv
 
@@ -184,7 +185,15 @@ def clear_csv():
     add_to_csv('users.csv', users, 'users')
     print (f'Removed {len_users - len(users)} duplicates')
 
-
+def del_session_files(dir_list):
+    for dir_path in dir_list:
+        if str (dir_path).startswith ('sessions_dir'):
+            if os.path.exists (str (dir_path)):
+                os.remove (str (dir_path))
+                js_name = str (dir_path).split ("\\")[1].split ('.')[0] + '.json'
+                os.remove (os.path.join ('sessions_dir', f'{js_name}'))
+            else:
+                print (f'Seems {str (dir_path)} doesnt seem to exist')
 
 if __name__ == '__main__':
     pass
