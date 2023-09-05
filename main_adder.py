@@ -27,7 +27,7 @@ async def join_groups(clients: typing.List, group_link: str):
 
 async def main_adder():
     # clients = await auth() - old method
-    skip_account = input('Do u wannna automatically skip account if it have some restriction (may cause errors) (y/n)? ').lower()
+    skip_account = input('Do u wannna automatically skip account if it have some restriction (y/n)? ').lower()
     if skip_account == 'y':
         clients = await auth_accounts(skip_account=True)
     else:
@@ -133,6 +133,11 @@ def choose_proxy_type():
     return proxy_type
 
 asyncio.run(main_adder())
+
+
+
+
+
 
 
 
