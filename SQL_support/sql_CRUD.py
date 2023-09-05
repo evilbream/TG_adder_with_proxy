@@ -1,4 +1,8 @@
+import datetime
 import sqlite3
+
+from dateutil.relativedelta import relativedelta
+
 from auth_helper import proxy_reformer
 from auth import Authorisation
 
@@ -74,18 +78,27 @@ def sql_change_proxy(api_id):
     conn.close ()
 
 
-def sql_change_something(api_id, what_to_change, changed_cred): # функция для изменения пароля и рестрикта
+def sql_change_something(api_id, what_to_change, changed_cred, phone=False): # функция для изменения пароля и рестрикта
     conn = sqlite3.connect ('accounts.db')
     cur = conn.cursor ()
     cur.execute (
         '''CREATE TABLE IF NOT EXISTS tg_ac (Name TEXT, API_ID INTEGER PRIMARY KEY NOT NULL, API_HASH TEXT, 
         Phone TEXT, PROXY TEXT, System TEXT, Password TEXT, Restriction TEXT)''')
-    cur.execute ('''SELECT Name FROM tg_ac
+    if phone:
+        cur.execute ('''SELECT Name FROM tg_ac
+                WHERE Phone == ?''', (phone,))
+    else:
+        cur.execute ('''SELECT Name FROM tg_ac
         WHERE API_ID == ?''', (api_id,))
     res = cur.fetchone ()
     if res is not None:
         if what_to_change == 'restriction':
-            cur.execute ('''UPDATE tg_ac
+            if phone:
+                cur.execute ('''UPDATE tg_ac
+                                            SET Restriction = ? 
+                                            WHERE Phone == ?''', (changed_cred, phone))
+            else:
+                cur.execute ('''UPDATE tg_ac
                             SET Restriction = ? 
                             WHERE API_ID == ?''', (changed_cred, api_id))
             print (f'Restriction for the account with the name {res[0]} was  changed')
@@ -101,7 +114,7 @@ def sql_change_something(api_id, what_to_change, changed_cred): # функция
     conn.close ()
 
 
-async def sql_get_acs_credentials(api_id):
+async def sql_get_acs_credentials(api_id, filter_banned=False):
     conn = sqlite3.connect ('accounts.db')
     cur = conn.cursor ()
     cur.execute (
@@ -118,22 +131,22 @@ async def sql_get_acs_credentials(api_id):
                 conn.close ()
                 if len(proxy[2]) == 32:
                     return await Authorisation (res[0], res[1], res[2], res[3], mtproxy=proxy, password=res[6],
-                                                device_model=res[5].split(':')[0], system_version=res[5].split(':')[1], app_version=res[5].split(':')[2]).starts ()
+                                                device_model=res[5].split(':')[0], system_version=res[5].split(':')[1], app_version=res[5].split(':')[2]).starts (filter_banned=filter_banned)
                 else:
                     conn.close ()
                     return await Authorisation (res[0], res[1], res[2], res[3], new_mtproxy=proxy, password=res[6],
-                                                device_model=res[5].split(':')[0], system_version=res[5].split(':')[1], app_version=res[5].split(':')[2]).starts ()
+                                                device_model=res[5].split(':')[0], system_version=res[5].split(':')[1], app_version=res[5].split(':')[2]).starts (filter_banned=filter_banned)
             else:
                 proxy = proxy_reformer(res[4])
                 conn.close ()
                 return await Authorisation(res[0], res[1], res[2], res[3], proxy, password=res[6],
-                                           device_model=res[5].split(':')[0], system_version=res[5].split(':')[1], app_version=res[5].split(':')[2]).starts()
+                                           device_model=res[5].split(':')[0], system_version=res[5].split(':')[1], app_version=res[5].split(':')[2]).starts(filter_banned=filter_banned)
         else:
             log_in = input(f'Unsupported proxy format or no proxy. Do u wanna log in to {res[0]} without proxy? (y/n) ').lower()
             if log_in == 'y':
                 conn.close()
                 return await Authorisation (res[0], res[1], res[2], res[3], password=res[6],
-                                            device_model=res[5].split(':')[0], system_version=res[5].split(':')[1], app_version=res[5].split(':')[2]).starts()
+                                            device_model=res[5].split(':')[0], system_version=res[5].split(':')[1], app_version=res[5].split(':')[2]).starts(filter_banned=filter_banned)
             else:
                 print('Ok')
                 conn.close()
@@ -143,15 +156,20 @@ async def sql_get_acs_credentials(api_id):
         return None
 
 
-def sql_get_restriction(api_id):
+def sql_get_restriction(api_id, phone=False):
     conn = sqlite3.connect ('accounts.db')
     cur = conn.cursor ()
     cur.execute (
         '''CREATE TABLE IF NOT EXISTS tg_ac (Name TEXT, API_ID INTEGER PRIMARY KEY NOT NULL, API_HASH TEXT, 
         Phone TEXT, PROXY TEXT, System TEXT, Password TEXT, Restriction TEXT)''')
-    cur.execute ('''SELECT Restriction 
-            FROM tg_ac
-            WHERE API_ID == ?''', (api_id,))
+    if phone:
+        cur.execute ('''SELECT Restriction 
+                        FROM tg_ac
+                        WHERE Phone == ?''', (phone,))
+    else:
+        cur.execute ('''SELECT Restriction 
+                FROM tg_ac
+                WHERE API_ID == ?''', (api_id,))
     res = cur.fetchone ()
     conn.close()
     return res
@@ -163,7 +181,7 @@ def get_all_api_id(restricted_only: bool =False):
         '''CREATE TABLE IF NOT EXISTS tg_ac (Name TEXT, API_ID INTEGER PRIMARY KEY NOT NULL, API_HASH TEXT, 
         Phone TEXT, PROXY TEXT, System TEXT, Password TEXT, Restriction TEXT)''')
     if restricted_only:
-        cur.execute('''SELECT API_ID FROM tg_ac WHERE Restriction == true''')
+        cur.execute('''SELECT API_ID FROM tg_ac WHERE Restriction LIKE 'true%' ''')
     else:
         cur.execute ('''SELECT API_ID FROM tg_ac''')
     res = cur.fetchall ()
@@ -180,5 +198,14 @@ def sql_del_table():
     conn.close()
 
 
+def sql_automatically_delete_restriction():
+    for restricted_api_id in get_all_api_id(restricted_only=True):
+        res = sql_get_restriction(restricted_api_id)
+        res = res[0].split(':')
+        pass_3_days = datetime.datetime(int(res[1]), int(res[2].lstrip('0')), int(res[3].lstrip('0')), int(res[4].lstrip('0'))) \
+                      + relativedelta(days=3) < datetime.datetime.now()
+        if pass_3_days:
+            sql_change_something(restricted_api_id, 'restriction', 'false')
+
 if __name__ == '__main__':
-    pass
+    sql_del_table()
