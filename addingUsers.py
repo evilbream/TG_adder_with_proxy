@@ -6,7 +6,7 @@ from telethon.tl.functions.channels import JoinChannelRequest, InviteToChannelRe
 from telethon.tl.types import InputChannel, InputUser
 from telethon import errors
 from SQL_support.sql_CRUD import sql_change_something
-
+import datetime
 from assist_func import get_from_csv
 
 
@@ -71,11 +71,7 @@ class Add_user:
                     await self.client (InviteToChannelRequest (chat, [user]))
                     await asyncio.sleep (random.uniform (2, 7))
                 except errors.PeerFloodError:
-                    print('Flood error')
-                    try:
-                        sql_change_something(me.id, 'restriction', 'true')
-                    except Exception as err:
-                        print(f'Probable have some problem with database {err}')
+                    await handle_db_errors (me.phone, me.username, 'Flood error')
                     break
                 except errors.UserPrivacyRestrictedError:
                     print (f"can't add {user_info[1]} due to the user privacy setting")
@@ -88,8 +84,15 @@ class Add_user:
                     continue
                 except errors.UserKickedError:
                     print(f'{user_info[1]} was kicked from this supergroup/channel')
+                except errors.UserBannedInChannelError:
+                    await handle_db_errors (me.phone, me.username,
+                                            'was banned from sending messages in supergroups/channels')
+                    break
+                except errors.UserBlockedError:
+                    await handle_db_errors(me.phone, me.username, 'User blocked')
+                    break
                 except Exception as err:
-                    print(err)
+                    print(f'Unhandled error pls send it to me - tg @malevolentkid {err}')
                     continue
 
     async def add_via_username(self, filename: str, group_link: str):
@@ -114,11 +117,7 @@ class Add_user:
                     print (f'adding {user_info[2]} by {me.first_name}')
                     await self.client (InviteToChannelRequest (chat, [user]))
                 except errors.PeerFloodError:
-                    print (f'Flood error, try {me.username} this account later')
-                    try:
-                        sql_change_something (me.id, 'restriction', 'true')
-                    except Exception as err:
-                        print(f'Have some problem with database {err}')
+                    await handle_db_errors(me.phone, me.username, 'Flood error')
                     break
                 except errors.UserPrivacyRestrictedError:
                     print (f"Can't add {user_info[2]} due to users privacy setting")
@@ -132,14 +131,23 @@ class Add_user:
                 except errors.UserKickedError:
                     print(f'{user_info[2]} was kicked from this supergroup/channel')
                 except errors.UserBannedInChannelError:
-                    print(f'{user_info[2]} was banned from sending messages in supergroups/channels')
-                    try:
-                        sql_change_something (me.id, 'restriction', 'true')
-                    except Exception as err:
-                        print (f'Have some problem with database {err}')
+                    await handle_db_errors(me.phone, me.username, 'was banned from sending messages in supergroups/channels')
+                    break
+                except errors.UserBlockedError:
+                    await handle_db_errors(me.phone, me.username, 'User blocked')
                     break
                 except Exception as err:
-                    print (err)
+                    print(f'Unhandled error pls send it to me - tg @malevolentkid {err}')
                     continue
 
 
+async def handle_db_errors(phone: str, username: str, error: str): # adding restriction to db with time
+    print (f'{username} {error}')
+    try:
+        sql_change_something (56, 'restriction', f'true:{datetime.datetime.now().strftime("%Y:%m:%d:%H")}', phone=phone)
+    except Exception as err:
+        try:
+            await asyncio.sleep (1, 5)
+            sql_change_something (56, 'restriction', f'true:{datetime.datetime.now().strftime("%Y:%m:%d:%H")}', phone=phone)
+        except Exception as err:
+            print (f'Have some problem with database {err}')
