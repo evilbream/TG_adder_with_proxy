@@ -1,4 +1,5 @@
 import asyncio
+import time
 
 from telethon import TelegramClient
 
@@ -6,7 +7,7 @@ from SQL_support.sql_CRUD import sql_get_account, sql_add_account, sql_del_accou
     sql_get_acs_credentials, get_all_api_id, sql_get_restriction, sql_change_something
 from assist_func import get_system_cred
 import random
-from assist_func import clear_csv
+from assist_func import clear_csv, del_session_files
 from warm_up.main_warm import warm_up
 from sessions_dir.add_by_session import add_account_by_session
 
@@ -14,7 +15,7 @@ from sessions_dir.add_by_session import add_account_by_session
 async def check_restriction(client: TelegramClient) -> TelegramClient or None:
     async with client:
         me = await client.get_me ()
-        if (me.restricted) or (sql_get_restriction(me.id)[0] == 'true'):
+        if (me.restricted) or (str(sql_get_restriction(0, me.phone)[0]).startswith('true')):
             print(f'Skipping {me.first_name}')
             return None
         else:
@@ -50,10 +51,6 @@ async def auth_for_parsing():
 #
 #eef4359a9b325ff1d1e5084df0e0f7537b6d736e2e636f6d&bot=@mtpro_xyz_bot#US
 
-
-
-
-
 def add_account():
     how_to_add_account = input('Do u want to add account using session files (y/n)? ')
     while how_to_add_account not in ['y', 'n']:
@@ -71,7 +68,7 @@ def add_account():
             print('api_id must be integer')
             api_id = int (input ('Enter api_id: '))
         api_hash = input('Enter api_hash: ')
-        phone = input('Enter phone number with country code: ')
+        phone = input('Enter phone number with country code: ').lstrip('+')
         proxy = input("Enter proxy for this account, press enter if u want to use this account without proxy.\n"
                       "Proxy format: proxy_type:addr:port:username:password or MTP:host_name:port:proxy_secret (for "
                       "MTProto Proxies), f.e. 'HTTP:22.92.130.159:8000:JKGGD3:R6KD4t' or "
@@ -107,12 +104,15 @@ def change_pass_restriction(what_to_change):
     while ch_another == 'y':
         acc_id = int (input (f'Enter the api id of the account for which u wanna change {what_to_change}: '))
         if what_to_change == 'restriction':
-            cred = input (f'Enter new {what_to_change} (True/False?)').lower ()
-            while cred not in ['true', 'false']:
-                cred = input(f'Enter new {what_to_change} (True/False?)').lower()
+            cred_ch = input (f'Do u want to change {what_to_change} to false (y/n)?').lower ()
+            while cred_ch not in ['y', 'n']:
+                cred_ch = input(f'Do u want to change {what_to_change} to false (y/n)?').lower()
+            if cred_ch == 'y':
+                cred = 'false'
+                sql_change_something (acc_id, what_to_change, cred)
         else:
             cred = input (f'Enter new {what_to_change}')
-        sql_change_something(acc_id, what_to_change, cred)
+            sql_change_something(acc_id, what_to_change, cred)
         ch_another = input (f'Do u wanna change {what_to_change} in another account (y/n)? ').lower ()
 
 
@@ -133,12 +133,17 @@ def prox_pass_restriction():
         change = input ('What do u want to change (proxy/password/restriction?)')
     return change
 
+async def filter_banned():
+    path_list = [await sql_get_acs_credentials(api_id, filter_banned=True) for api_id in get_all_api_id()]
+    path_list = [path_l for path_l in path_list if path_l is not None]
+    return path_list
+
 
 async def main_menu():
     what_to_do = input('Menu:\n1.Add account\n2.View all accounts\n3.Change proxy/password/restriction'
-                       '\n4.Test auth\n5.Delete account\n6.Delete duplicates from parsed users\n7.Warm up mode'
-                       '\n8.Quit \n - ')
-    while what_to_do != '8':
+                       '\n4.Test auth\n5.Delete account\n6.Delete duplicates from parsed users\n7.Warm up mode\n'
+                       '8.Delete banned accounts\n9.Quit \n - ')
+    while what_to_do != '9':
         if what_to_do == '1':
             add_account()
         elif what_to_do == '2':
@@ -163,8 +168,12 @@ async def main_menu():
             print('Duplicates deleted')
         elif what_to_do == '7':
             await warm_up()
+        elif what_to_do == '8':
+            del_path = await filter_banned()
+            time.sleep(1)
+            del_session_files(del_path)
         what_to_do = input ('Menu:\n1. Add account\n2.View all accounts\n3.Change proxy/password/restriction'
-                            '\n4.Test auth\n5.Delete account\n6.Delete duplicates from parsed users\n7.Warm up mode\n8.Quit \n - ')
+                            '\n4.Test auth\n5.Delete account\n6.Delete duplicates from parsed users\n7.Warm up mode\n8.Delete banned accounts\n9.Quit \n - ')
 
 
 if __name__ == '__main__':
