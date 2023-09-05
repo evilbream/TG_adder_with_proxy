@@ -10,6 +10,7 @@ from assist_func import get_csv_len, get_from_csv, divide_proxy, convert_to_csv,
 # from authorise_accounts import auth  the old method no longer works
 from account_manager import auth_accounts
 from addingUsers import Add_user
+from SQL_support.sql_CRUD import sql_automatically_delete_restriction
 from assist_func import split_ac
 logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
                     level=logging.WARNING)
@@ -27,6 +28,7 @@ async def join_groups(clients: typing.List, group_link: str):
 
 async def main_adder():
     # clients = await auth() - old method
+    sql_automatically_delete_restriction()
     skip_account = input('Do u wannna automatically skip account if it have some restriction (y/n)? ').lower()
     if skip_account == 'y':
         clients = await auth_accounts(skip_account=True)
@@ -133,11 +135,6 @@ def choose_proxy_type():
     return proxy_type
 
 asyncio.run(main_adder())
-
-
-
-
-
 
 
 
