@@ -19,6 +19,7 @@ Star it ⭐️ - don’t in darkness let me wither
 - Scrape users from comments in channel
 - Remove duplicates from the user file
 - Automaticaly filter bot users
+- Device model, system and app version for each account
 - Automatically skip an account, that reached limit for the day
 - Free tool
 - More features are coming
