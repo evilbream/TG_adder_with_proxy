@@ -1,7 +1,8 @@
 import re
 import typing
 import csv
-from telethon.tl.types import ChannelParticipantsRecent, ChannelParticipantsAdmins
+from telethon.tl.types import ChannelParticipantsRecent, ChannelParticipantsAdmins, ChannelParticipantCreator, \
+    ChannelParticipantAdmin
 from telethon import TelegramClient
 import members_filter
 import asyncio
@@ -50,7 +51,7 @@ class Parser:
         async with self.client:
             async for user in self.client.iter_participants(group_id, limit=limit, filter=status_filter):
                 user_filter = members_filter.Member_filter (user)
-                if user.bot or user_filter.exclude(): #исключить в имени или фамилии
+                if (user.bot) or (isinstance(user.participant, ChannelParticipantCreator)) or (isinstance(user.participant, ChannelParticipantAdmin)) or (user_filter.exclude()): #исключить в имени или фамилии
                     continue
                 users.append((user.id, user.first_name, user.username, user.access_hash))
         return users
@@ -96,7 +97,7 @@ class Parser:
                     try:
                         async for reply in self.client.iter_messages (entity, reply_to=mes.id):
                             user = await self.client.get_entity (reply.from_id)
-                            if user.bot:
+                            if (user.bot) or (isinstance(user.participant, ChannelParticipantCreator)) or (isinstance(user.participant, ChannelParticipantAdmin)):
                                 pass
                             else:
                                 user_list.append ((user.id, user.first_name, user.username, user.access_hash))
@@ -134,7 +135,7 @@ class Parser:
                     if (user.status.was_online.year >= int (date[0])) and (
                             user.status.was_online.month >= int (date[1])) and (
                             user.status.was_online.day >= int (date[2])):
-                        if user.bot:
+                        if (user.bot) or (isinstance(user.participant, ChannelParticipantCreator)) or (isinstance(user.participant, ChannelParticipantAdmin)):
                             pass
                         else:
                             user_list.append ((user.id, user.first_name, user.username, user.access_hash))
@@ -165,7 +166,7 @@ class Parser:
                             user.status.was_online.day >= int (date[2])) and (
                             user.status.was_online.hour >= int (date[3])) and (
                             user.status.was_online.minute >= int (date[4])):
-                        if user.bot:
+                        if (user.bot) or (isinstance(user.participant, ChannelParticipantCreator)) or (isinstance(user.participant, ChannelParticipantAdmin)):
                             pass
                         else:
                             print(user.status)
@@ -218,7 +219,7 @@ class Parser:
             try:
                 if reaction is None:
                     user = await self.client.get_entity (i.peer_id.user_id)  # get user by id (entity)
-                    if user.bot:
+                    if (user.bot) or (isinstance(user.participant, ChannelParticipantCreator)) or (isinstance(user.participant, ChannelParticipantAdmin)):
                         pass
                     else:
                         try:
@@ -230,7 +231,7 @@ class Parser:
                     if reaction_in_mes == reaction:
                         user = await self.client.get_entity (i.peer_id.user_id)  # get user by id (entity)
                         print (i)  # delete
-                        if user.bot:
+                        if (user.bot) or (isinstance(user.participant, ChannelParticipantCreator)) or (isinstance(user.participant, ChannelParticipantAdmin)):
                             pass
                         else:
                             try:
