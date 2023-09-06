@@ -11,7 +11,7 @@ def what_to_do():
                          '\n3. Scrape users from comments in the channel\n4. Scrape users, who were online later than '
                          'a certain date\n5. Scrape users, who reacted in the group (by specific emoji or with any '
                          'emoji)\n6. Scrape users, who were online later than a certain date n time\n7. Quit\n - ')
-    while parser_menu not in '123456':
+    while parser_menu not in '1234567':
         parser_menu = input (
             'Choose how to scrape users:\n1. Scrape users only with status Last seen Recently\n2. Parse without any filter'
             '\n3. Scrape users from comments in the channel\n4. Scrape users, who were online later than '
