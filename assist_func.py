@@ -195,5 +195,14 @@ def del_session_files(dir_list):
             else:
                 print (f'Seems {str (dir_path)} doesnt seem to exist')
 
+
+def del_user_without_username():
+    users = []
+    for user in get_from_csv('users.csv', 'users'):
+        if user[2] != '':
+            users.append(user)
+    add_to_csv('users.csv', users, 'users')
+
+
 if __name__ == '__main__':
-    pass
+    del_user_without_username()
