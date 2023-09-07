@@ -7,7 +7,7 @@ from SQL_support.sql_CRUD import sql_get_account, sql_add_account, sql_del_accou
     sql_get_acs_credentials, get_all_api_id, sql_get_restriction, sql_change_something
 from assist_func import get_system_cred
 import random
-from assist_func import clear_csv, del_session_files
+from assist_func import clear_csv, del_session_files, del_user_without_username
 from warm_up.main_warm import warm_up
 from sessions_dir.add_by_session import add_account_by_session
 
@@ -142,8 +142,8 @@ async def filter_banned():
 async def main_menu():
     what_to_do = input('Menu:\n1.Add account\n2.View all accounts\n3.Change proxy/password/restriction'
                        '\n4.Test auth\n5.Delete account\n6.Delete duplicates from parsed users\n7.Warm up mode\n'
-                       '8.Delete banned accounts\n9.Quit \n - ')
-    while what_to_do != '9':
+                       '8.Delete banned accounts\n9.Delete from users.csv users without username\n10.Quit \n - ')
+    while what_to_do != '10':
         if what_to_do == '1':
             add_account()
         elif what_to_do == '2':
@@ -172,8 +172,12 @@ async def main_menu():
             del_path = await filter_banned()
             time.sleep(1)
             del_session_files(del_path)
+        elif what_to_do == '9':
+            del_user_without_username()
+            print('Users without usernames successfully deleted')
         what_to_do = input ('Menu:\n1. Add account\n2.View all accounts\n3.Change proxy/password/restriction'
-                            '\n4.Test auth\n5.Delete account\n6.Delete duplicates from parsed users\n7.Warm up mode\n8.Delete banned accounts\n9.Quit \n - ')
+                            '\n4.Test auth\n5.Delete account\n6.Delete duplicates from parsed users\n7.Warm up '
+                            'mode\n8.Delete banned accounts\n9.Delete from users.csv users without username\n10.Quit \n - ')
 
 
 if __name__ == '__main__':
