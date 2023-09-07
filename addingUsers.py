@@ -120,7 +120,7 @@ class Add_user:
                     await handle_db_errors(me.phone, me.username, 'Flood error')
                     break
                 except errors.UserPrivacyRestrictedError:
-                    print (f"Can't add {user_info[2]} due to users privacy setting")
+                    print (f"Can't add {user_info[2]} due to the user privacy setting")
                     continue
                 except errors.UserNotMutualContactError:
                     print (f'{user_info[2]}  is not a mutual contact')
