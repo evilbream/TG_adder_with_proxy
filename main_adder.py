@@ -15,6 +15,7 @@ from assist_func import split_ac
 logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
                     level=logging.WARNING)
 
+# pass 7 accounts for one time
 
 async def join_groups(clients: typing.List, group_link: str):
     join_group = [Add_user (cl).join_group (group_link) for cl in clients]
@@ -29,7 +30,7 @@ async def join_groups(clients: typing.List, group_link: str):
 async def main_adder():
     # clients = await auth() - old method
     sql_automatically_delete_restriction()
-    skip_account = input('Do u wannna automatically skip account if it have some restriction (y/n)? ').lower()
+    skip_account = input('Do u wannna automatically skip an account if it have some restriction (y/n)? ').lower()
     if skip_account == 'y':
         clients = await auth_accounts(skip_account=True)
     else:
@@ -68,7 +69,13 @@ async def main_adder():
             for client in clients:
                 client_list.append (Add_user (client).add_via_id(f'users{num}.csv', group_link))
                 num += 1
-            await asyncio.gather(*client_list, return_exceptions=True)
+
+            # run loop per 7 accounts
+            if len (client_list) > 5:
+                for client in get_batch_acc (batch_size=5, clients=client_list):
+                    await asyncio.gather (*client, return_exceptions=True)
+            else:
+                await asyncio.gather (*client_list, return_exceptions=True)
 
         else:
             group_lin = await join_groups(clients, how_to_act)  # join group from which users were parsed, link returned
@@ -78,7 +85,12 @@ async def main_adder():
             for client in clients:
                 client_list.append (Add_user (client).add_via_id (f'users{num}.csv', group_link))
                 num += 1
-            await asyncio.gather (*client_list, return_exceptions=True)
+
+            if len (client_list) > 5:
+                for client in get_batch_acc (batch_size=5, clients=client_list):
+                    await asyncio.gather (*client, return_exceptions=True)
+            else:
+                await asyncio.gather (*client_list, return_exceptions=True)
 
     elif how_to_add == 'username':
         num = 0
@@ -87,7 +99,19 @@ async def main_adder():
             client_list.append(Add_user(client).add_via_username(f'users{num}.csv', group_link))
             num += 1
 
-        await asyncio.gather (*client_list, return_exceptions=True)
+        if len(client_list) > 5:
+            for client in get_batch_acc(batch_size=5, clients=client_list):
+                await asyncio.gather (*client, return_exceptions=True)
+        else:
+            await asyncio.gather (*client_list, return_exceptions=True)
+
+def get_batch_acc(batch_size: int, clients):
+    batch = 0
+    for _ in range (len (clients) // batch_size + 1):
+        if not clients[batch:batch + batch_size]:
+            break
+        yield clients[batch:batch + batch_size]
+        batch += batch_size
 
 
 def choose_dialog(dialog_dict: typing.Dict) -> int:
