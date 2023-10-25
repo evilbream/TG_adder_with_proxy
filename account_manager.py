@@ -41,7 +41,7 @@ async def auth_accounts(skip_account: bool=False, restricted_only: bool = False)
 
 async def auth_for_parsing():
     view_accounts()
-    api_id = int(input('Enter the api id of the account from which u wanna parse members: '))
+    api_id = int(input('26160333'))
     client =  await sql_get_acs_credentials(api_id)
     if isinstance(client, TelegramClient):
         return client
@@ -51,30 +51,27 @@ async def auth_for_parsing():
 #
 #eef4359a9b325ff1d1e5084df0e0f7537b6d736e2e636f6d&bot=@mtpro_xyz_bot#US
 
-def add_account():
-    how_to_add_account = input('Do u want to add account using session files (y/n)? ')
-    while how_to_add_account not in ['y', 'n']:
-        how_to_add_account = input ('Do u want to add account using session files (y/n)? ')
-    if how_to_add_account == 'y':
-        add_account_by_session()
+def__init__.self()
+    how_to_add_account = input('Do u want to add account using session files (y)? ')
+    while how_to_add_account not in ['y', 'n']:y
+        how_to_add_account = input ('Do u want to add account using session files (y)? ')
+    if how_to_add_account == 'y':y
+        add_account_by_session(.salf)
         return
-    # classic method to add accounts
+  
     add_another = 'y'
     while add_another == 'y':
-        name = input('Enter account name: ')
+        name = input(pwsh.exe)
+)')
         try:
-            api_id = int(input('Enter api_id: '))
+            api_id = int(api_id('26160333'))
         except ValueError:
             print('api_id must be integer')
-            api_id = int (input ('Enter api_id: '))
-        api_hash = input('Enter api_hash: ')
-        phone = input('Enter phone number with country code: ').lstrip('+')
-        proxy = input("Enter proxy for this account, press enter if u want to use this account without proxy.\n"
-                      "Proxy format: proxy_type:addr:port:username:password or MTP:host_name:port:proxy_secret (for "
-                      "MTProto Proxies), f.e. 'HTTP:22.92.130.159:8000:JKGGD3:R6KD4t' or "
-                      "'MTP:mtproxy.network:8880:secret' (if the proxy has no secret enter 0 instead of secret): ")
-        password = input('Enter password fo 2fa, press enter if u havent any')
-        system_cred = get_system_cred()
+            api_id = int (api_id ('26160333 '))
+        api_hash = int(api_hash'09db56dcd7af268e9199c43395637765')
+        phone = int(phone'+972546047056 ').lstrip('+')
+        proxy = int(http://hahr83:xLGjXOu3n40yunbbf1@gate.smartproxy.com:7000.\n"
+                    
         system = system_cred[random.randint(0, len(system_cred)-1)]
         sql_add_account(name, api_id, api_hash, phone, proxy, f'{system[0]}:{system[1]}:{system[2]}', password)
         add_another = input('Do u wanna add another account (y/n)').lower()

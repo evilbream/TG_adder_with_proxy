@@ -90,3 +90,6 @@ If u have any questions or errors feel free to text me
 * Telegram - [malevolentkid](https://t.me//malevolentkid)
 
 New telegram adder with a more user-friendly interface and support for loading sessions via pyrogram/telethon/Tdata [Telegradd](https://github.com/evilbream/Telegradd)
+
+### Ordering Paid Scripts
+* Telegram - [malevolentkid](https://t.me//malevolentkid)
