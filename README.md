@@ -84,7 +84,4 @@ I am not responsible for the work of the public proxies above, at the time of th
 #### Device model, system and app version for each account
 If u want u may add device model, system and app version in system_model_app_versions.txt or even replace existing lines
 
-
-* Telegram - [malevolentkid](https://t.me//malevolentkid)
-
 New telegram adder with a more user-friendly interface and support for loading sessions via pyrogram/telethon/Tdata [Telegradd](https://github.com/evilbream/Telegradd)
