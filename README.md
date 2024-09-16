@@ -84,8 +84,6 @@ I am not responsible for the work of the public proxies above, at the time of th
 #### Device model, system and app version for each account
 If u want u may add device model, system and app version in system_model_app_versions.txt or even replace existing lines
 
-### Errors n questions
-If u have any questions or errors feel free to text me
 
 * Telegram - [malevolentkid](https://t.me//malevolentkid)
 
